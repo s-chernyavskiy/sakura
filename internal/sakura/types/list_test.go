@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestList_Push(t *testing.T) {
+func TestList_PushFront(t *testing.T) {
 	tests := []struct {
 		name    string
 		val     []string
@@ -47,15 +47,15 @@ func TestList_Push(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var list types.List
-			gotErr := list.Push(tt.val...)
+			gotErr := list.PushFront(tt.val...)
 			if gotErr != nil {
 				if !tt.wantErr {
-					t.Errorf("Push() failed: %v", gotErr)
+					t.Errorf("PushFront() failed: %v", gotErr)
 				}
 				return
 			}
 			if tt.wantErr {
-				t.Fatal("Push() succeeded unexpectedly")
+				t.Fatal("PushFront() succeeded unexpectedly")
 			}
 			assert.Equal(t, len(tt.val), list.Length(), "List lengths mismatch")
 		})

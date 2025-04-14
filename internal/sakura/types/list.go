@@ -137,7 +137,7 @@ func buildValueList(front bool, val ...string) *List {
 	return l
 }
 
-func (list *List) Push(val ...string) error {
+func (list *List) PushFront(val ...string) error {
 	list.m.Lock()
 
 	defer list.m.Unlock()
@@ -153,3 +153,5 @@ func (list *List) Push(val ...string) error {
 
 	return nil
 }
+
+
