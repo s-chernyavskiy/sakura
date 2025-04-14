@@ -7,13 +7,13 @@ import (
 
 func AssertEqual(t *testing.T, expected any, given any) {
 	if expected != given {
-		t.Errorf("assertion failed, want %T : given %T", expected, given)
+		t.Errorf("assertion failed, want %v : given %v", expected, given)
 	}
 }
 
 func AssertStringSliceEqual(t *testing.T, expected []string, given []string) {
 	if !reflect.DeepEqual(expected, given) {
-		t.Errorf("array assertion failed, want %v : given %v", expected, given)
+		t.Errorf("slice assertion failed, want %v : given %v", expected, given)
 	}
 }
 
