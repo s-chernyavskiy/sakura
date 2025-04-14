@@ -141,6 +141,8 @@ func buildValueList(front bool, val ...string) *List {
 }
 
 func (l *List) Length() int {
+	l.m.Lock()
+	defer l.m.Unlock()
 	return l.len
 }
 
