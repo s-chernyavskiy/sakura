@@ -193,3 +193,23 @@ func (l *List) Tail() *Node {
 
 	return l.back()
 }
+
+func (l *List) PopBack() any {
+	l.m.Lock()
+	defer l.m.Unlock()
+	if l.Tail() == nil {
+		return nil
+	}
+
+	return l.remove(l.Tail())
+}
+
+func (l *List) PopFront() any {
+	l.m.Lock()
+	defer l.m.Unlock()
+	if l.Head() == nil {
+		return nil
+	}
+
+	return l.remove(l.Head())
+}
