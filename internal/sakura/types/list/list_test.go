@@ -1,9 +1,9 @@
-package types_test
+package list_test
 
 import (
 	"testing"
 
-	"github.com/s-chernyavskiy/sakura/internal/sakura/types"
+	"github.com/s-chernyavskiy/sakura/internal/sakura/types/list"
 	"github.com/s-chernyavskiy/sakura/pkg/testsuite"
 )
 
@@ -47,7 +47,7 @@ func TestList_PushFront(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			gotErr := l.PushFront(tt.val...)
 			if gotErr != nil {
 				if !tt.wantErr {
@@ -103,7 +103,7 @@ func TestList_PushBack(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			gotErr := l.PushBack(tt.val...)
 			if gotErr != nil {
 				if !tt.wantErr {
@@ -142,7 +142,7 @@ func TestList_Head(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			if tt.toAdd {
 				l.PushBack(tt.valuesToAdd...)
 			}
@@ -185,7 +185,7 @@ func TestList_Tail(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			if tt.toAdd {
 				l.PushBack(tt.valuesToAdd...)
 			}
@@ -225,7 +225,7 @@ func TestList_PopBack(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			l.PushBack(tt.values...)
 
 			got := l.PopBack()
@@ -255,7 +255,7 @@ func TestList_PopFront(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			l.PushBack(tt.values...)
 
 			got := l.PopFront()
@@ -306,7 +306,7 @@ func TestList_Range(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var l types.List
+			var l list.List
 			l.PushBack(tt.values...)
 
 			got := l.Range(tt.start, tt.stop)
