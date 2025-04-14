@@ -3,6 +3,7 @@ package testsuite
 import (
 	"reflect"
 	"testing"
+	"slices"
 )
 
 func AssertEqual(t *testing.T, expected any, given any) {
@@ -28,6 +29,23 @@ func AssertNil(t *testing.T, i any) {
 	default:
 		if i != nil {
 			t.Errorf("wanted %v for non nil type but is not nil", i)
+		}
+	}
+}
+
+func AssertErrorEqual(t *testing.T, expected error, given error) {
+	if expected.Error() != given.Error() {
+		t.Errorf("error assertion failed, want %v : given %v", expected.Error(), given.Error())
+	}
+}
+
+func AssertContainsAllElements(t *testing.T, expected []string, given []string) {
+	var match bool
+	for _, i := range expected {
+		match = slices.Contains(given, i)
+
+		if !match {
+			t.Errorf("element %v [%T] not found in array %v [%T]", i, i, given, given)
 		}
 	}
 }

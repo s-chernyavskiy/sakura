@@ -1,6 +1,7 @@
 package testsuite_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/s-chernyavskiy/sakura/pkg/testsuite"
@@ -107,7 +108,7 @@ func TestAssertNil(t *testing.T) {
 		i       any
 		wantErr bool
 	}{
-{
+		{
 			name:    "nil value",
 			i:       nil,
 			wantErr: false,
@@ -187,6 +188,88 @@ func TestAssertNil(t *testing.T) {
 				t.Errorf("AssertNil() failed when it should have passed for %v", tt.i)
 			} else if tt.wantErr && !test.Failed() {
 				t.Errorf("AssertNil() passed when it should have failed for %v", tt.i)
+			}
+		})
+	}
+}
+
+func TestAssertErrorEqual(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		expected error
+		given    error
+		wantErr  bool
+	}{
+		{
+			name:     "generic error",
+			expected: errors.New("foo"),
+			given:    errors.New("foo"),
+			wantErr:  false,
+		},
+		{
+			name:     "generic error fail",
+			expected: errors.New("foo"),
+			given:    errors.New("bar"),
+			wantErr:  true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			test := &testing.T{}
+			testsuite.AssertErrorEqual(test, tt.expected, tt.given)
+
+			if !tt.wantErr && test.Failed() {
+				t.Errorf("AssertErrorEqual() failed when it should have passed for %v == %v", tt.expected, tt.given)
+			} else if tt.wantErr && !test.Failed() {
+				t.Errorf("AssertErrorEqual() passed when it should have failed for %v != %v", tt.expected, tt.given)
+			}
+		})
+	}
+}
+
+func TestAssertContainsAllElements(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		expected []string
+		given    []string
+		wantErr  bool
+	}{
+		{
+			name:     "generic slice",
+			expected: []string{"1", "2", "3"},
+			given:    []string{"1", "2", "3"},
+			wantErr:  false,
+		},
+		{
+			name:     "generic slice failure",
+			expected: []string{"1", "2", "3"},
+			given:    []string{"1", "2", "4"},
+			wantErr:  true,
+		},
+		{
+			name:     "empty lists",
+			expected: []string{},
+			given:    []string{},
+			wantErr:  false,
+		},
+		{
+			name:     "empty and non empty lists",
+			expected: []string{},
+			given:    []string{"1"},
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			test := &testing.T{}
+			testsuite.AssertContainsAllElements(test, tt.expected, tt.given)
+
+			if !tt.wantErr && test.Failed() {
+				t.Errorf("AssertContainsAllElements() failed when it should have passed for %v == %v", tt.expected, tt.given)
+			} else if tt.wantErr && !test.Failed() {
+				t.Errorf("AssertContainsAllElements() passed when it should have failed for %v != %v", tt.expected, tt.given)
 			}
 		})
 	}
