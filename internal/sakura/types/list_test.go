@@ -205,3 +205,63 @@ func TestList_Tail(t *testing.T) {
 		})
 	}
 }
+
+func TestList_PopBack(t *testing.T) {
+	tests := []struct {
+		name   string
+		want   string
+		values []string
+	}{
+		{
+			name:   "generic pop back",
+			want:   "3",
+			values: []string{"1", "2", "3"},
+		},
+		{
+			name:   "null value pop back",
+			want:   "",
+			values: []string{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var l types.List
+			l.PushBack(tt.values...)
+
+			got := l.PopBack()
+			if got != tt.want {
+				t.Errorf("PopBack() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestList_PopFront(t *testing.T) {
+	tests := []struct {
+		name   string // description of this test case
+		want   any
+		values []string
+	}{
+		{
+			name:   "generic pop front",
+			want:   "1",
+			values: []string{"1", "2", "3"},
+		},
+		{
+			name:   "null value pop front",
+			want:   "",
+			values: []string{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var l types.List
+			l.PushBack(tt.values...)
+
+			got := l.PopFront()
+			if got != tt.want {
+				t.Errorf("PopFront() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

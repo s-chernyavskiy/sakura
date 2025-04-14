@@ -8,7 +8,7 @@ import (
 type Node struct {
 	next, prev *Node
 	list       *List
-	Value      any
+	Value      string
 }
 
 func (n *Node) nextNode() *Node {
@@ -78,16 +78,16 @@ func (l *List) insert(n, at *Node) *Node {
 	return n
 }
 
-func (l *List) insertValue(v any, at *Node) *Node {
+func (l *List) insertValue(v string, at *Node) *Node {
 	return l.insert(&Node{Value: v}, at)
 }
 
-func (l *List) pushBack(v any) *Node {
+func (l *List) pushBack(v string) *Node {
 	l.allocateSpace()
 	return l.insertValue(v, l.root.prev)
 }
 
-func (l *List) pushFront(v any) *Node {
+func (l *List) pushFront(v string) *Node {
 	l.allocateSpace()
 	return l.insertValue(v, &l.root)
 }
@@ -101,7 +101,7 @@ func (l *List) removeNode(n *Node) {
 	l.len--
 }
 
-func (l *List) remove(n *Node) any {
+func (l *List) remove(n *Node) string {
 	if n.list == l {
 		l.removeNode(n)
 	}
@@ -154,7 +154,7 @@ func (l *List) PushFront(val ...string) error {
 	if len(val) == 0 {
 		return errors.New("No items to insert")
 	} else if len(val) == 1 {
-		l.pushFront(val)
+		l.pushFront(val[0])
 	} else {
 		newList := buildValueList(true, val...)
 		l.pushFrontList(newList)
@@ -171,7 +171,7 @@ func (l *List) PushBack(val ...string) error {
 	if len(val) == 0 {
 		return errors.New("No items to insert")
 	} else if len(val) == 1 {
-		l.pushBack(val)
+		l.pushBack(val[0])
 	} else {
 		newList := buildValueList(false, val...)
 		l.pushBackList(newList)
@@ -181,34 +181,28 @@ func (l *List) PushBack(val ...string) error {
 }
 
 func (l *List) Head() *Node {
-	l.m.Lock()
-	defer l.m.Unlock()
-
 	return l.front()
 }
 
 func (l *List) Tail() *Node {
-	l.m.Lock()
-	defer l.m.Unlock()
-
 	return l.back()
 }
 
-func (l *List) PopBack() any {
+func (l *List) PopBack() string {
 	l.m.Lock()
 	defer l.m.Unlock()
 	if l.Tail() == nil {
-		return nil
+		return ""
 	}
 
 	return l.remove(l.Tail())
 }
 
-func (l *List) PopFront() any {
+func (l *List) PopFront() string {
 	l.m.Lock()
 	defer l.m.Unlock()
 	if l.Head() == nil {
-		return nil
+		return ""
 	}
 
 	return l.remove(l.Head())
