@@ -45,10 +45,6 @@ func newList() *List {
 	return new(List).init()
 }
 
-func (l *List) Length() int {
-	return l.len
-}
-
 func (l *List) front() *Node {
 	if l.len == 0 {
 		return nil
@@ -113,6 +109,13 @@ func (l *List) remove(n *Node) any {
 	return n.Value
 }
 
+func (l *List) pushBackList(other *List) {
+	l.allocateSpace()
+	for i, e := other.Length(), other.front(); i > 0; i, e = i-1, e.nextNode() {
+		l.insertValue(e.Value, l.root.prev)
+	}
+}
+
 func (l *List) pushFrontList(other *List) {
 	l.allocateSpace()
 	for i, e := other.Length(), other.back(); i > 0; i, e = i-1, e.prevNode() {
@@ -137,21 +140,54 @@ func buildValueList(front bool, val ...string) *List {
 	return l
 }
 
-func (list *List) PushFront(val ...string) error {
-	list.m.Lock()
+func (l *List) Length() int {
+	return l.len
+}
 
-	defer list.m.Unlock()
+func (l *List) PushFront(val ...string) error {
+	l.m.Lock()
+
+	defer l.m.Unlock()
 
 	if len(val) == 0 {
 		return errors.New("No items to insert")
 	} else if len(val) == 1 {
-		list.pushFront(val)
+		l.pushFront(val)
 	} else {
 		newList := buildValueList(true, val...)
-		list.pushFrontList(newList)
+		l.pushFrontList(newList)
 	}
 
 	return nil
 }
 
+func (l *List) PushBack(val ...string) error {
+	l.m.Lock()
 
+	defer l.m.Unlock()
+
+	if len(val) == 0 {
+		return errors.New("No items to insert")
+	} else if len(val) == 1 {
+		l.pushBack(val)
+	} else {
+		newList := buildValueList(false, val...)
+		l.pushBackList(newList)
+	}
+
+	return nil
+}
+
+func (l *List) Head() *Node {
+	l.m.Lock()
+	defer l.m.Unlock()
+
+	return l.front()
+}
+
+func (l *List) Tail() *Node {
+	l.m.Lock()
+	defer l.m.Unlock()
+
+	return l.back()
+}
