@@ -293,8 +293,8 @@ func TestList_Range(t *testing.T) {
 			name:   "range from tail",
 			start:  -2,
 			stop:   -1,
-			want: []string{"4", "5"},
-			values:   []string{"1", "2", "3", "4", "5"},
+			want:   []string{"4", "5"},
+			values: []string{"1", "2", "3", "4", "5"},
 		},
 		{
 			name:   "range from head",
