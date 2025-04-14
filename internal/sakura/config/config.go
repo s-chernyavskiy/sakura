@@ -1,18 +1,30 @@
 package config
 
-import "github.com/jessevdk/go-flags"
+import (
+	"os"
 
-type Opts struct {
-	Port uint   `short:"p" long:"port" description:"Port for application" default:"6543"`
-	Host string `long:"host" description:"Host for application" default:"127.0.0.1"`
+	"gopkg.in/yaml.v3"
+)
+
+type AppConfig struct {
+	Port       string `yaml:"host"`
+	Host       int    `yaml:"port"`
+	MaxClients int    `yaml:"max-clients"`
+	MaxTimeout int `yaml:"max-timeout"`
 }
 
-func NewOpts(args []string) *Opts {
-	var options Opts
-	args, err := flags.ParseArgs(&options, args)
+func NewConfig() *AppConfig {
+	data, err := os.ReadFile("config/config.yaml")
 	if err != nil {
-		panic("opts init error")
+		panic(err)
 	}
 
-	return &options
+	var config AppConfig
+
+	err = yaml.Unmarshal(data, &config)
+	if err != nil {
+		panic(err)
+	}
+
+	return &config
 }

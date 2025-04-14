@@ -1,9 +1,12 @@
 package main
 
 import (
-	"github.com/s-chernyavskiy/sakura/internal/sakura"
+	"fmt"
+
+	"github.com/s-chernyavskiy/sakura/internal/sakura/config"
 )
 
 func main() {
-	sakura.Start()
+	cfg := config.NewConfig()
+	fmt.Println(cfg)
 }
