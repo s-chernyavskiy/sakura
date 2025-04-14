@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/s-chernyavskiy/sakura/internal/sakura/types"
-	"github.com/stretchr/testify/assert"
+	"github.com/s-chernyavskiy/sakura/pkg/testsuite"
 )
 
 func TestList_PushFront(t *testing.T) {
@@ -58,7 +58,7 @@ func TestList_PushFront(t *testing.T) {
 			if tt.wantErr {
 				t.Fatal("PushFront() succeeded unexpectedly")
 			}
-			assert.Equal(t, len(tt.val), l.Length(), "List lengths mismatch")
+			testsuite.AssertEqual(t, len(tt.val), l.Length())
 		})
 	}
 }
@@ -115,7 +115,7 @@ func TestList_PushBack(t *testing.T) {
 				t.Fatal("PushBack() succeeded unexpectedly")
 			}
 
-			assert.Equal(t, len(tt.val), l.Length(), "List lengths mismatch")
+			testsuite.AssertEqual(t, len(tt.val), l.Length())
 		})
 	}
 }
