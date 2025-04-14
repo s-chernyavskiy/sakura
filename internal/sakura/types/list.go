@@ -30,7 +30,7 @@ func (n *Node) prevNode() *Node {
 type List struct {
 	root Node
 	len  int
-	m    sync.Mutex
+	m    sync.RWMutex
 }
 
 func (l *List) init() *List {
@@ -141,14 +141,14 @@ func buildValueList(front bool, val ...string) *List {
 }
 
 func (l *List) Length() int {
-	l.m.Lock()
-	defer l.m.Unlock()
+	l.m.RLock()
+	defer l.m.RUnlock()
+
 	return l.len
 }
 
 func (l *List) PushFront(val ...string) error {
 	l.m.Lock()
-
 	defer l.m.Unlock()
 
 	if len(val) == 0 {
@@ -165,7 +165,6 @@ func (l *List) PushFront(val ...string) error {
 
 func (l *List) PushBack(val ...string) error {
 	l.m.Lock()
-
 	defer l.m.Unlock()
 
 	if len(val) == 0 {
@@ -181,10 +180,16 @@ func (l *List) PushBack(val ...string) error {
 }
 
 func (l *List) Head() *Node {
+	l.m.RLock()
+	defer l.m.RUnlock()
+
 	return l.front()
 }
 
 func (l *List) Tail() *Node {
+	l.m.RLock()
+	defer l.m.RUnlock()
+
 	return l.back()
 }
 
