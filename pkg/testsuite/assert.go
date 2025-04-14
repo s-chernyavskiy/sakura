@@ -18,7 +18,16 @@ func AssertStringSliceEqual(t *testing.T, expected []string, given []string) {
 }
 
 func AssertNil(t *testing.T, i any) {
-	if !reflect.ValueOf(i).IsNil() {
-		t.Errorf("wanted %v is not nil", i)
+	val := reflect.ValueOf(i)
+	switch val.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
+		reflect.Ptr, reflect.Slice:
+		if !val.IsNil() {
+			t.Errorf("wanted %v is not nil", i)
+		}
+	default:
+		if i != nil {
+			t.Errorf("wanted %v for non nil type but is not nil", i)
+		}
 	}
 }
