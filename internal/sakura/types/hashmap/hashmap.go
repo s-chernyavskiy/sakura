@@ -20,7 +20,7 @@ func (m *HashMap) Set(key, value string) {
 	m.m[key] = value
 }
 
-func (m *HashMap) Get(key, value string) string {
+func (m *HashMap) Get(key string) string {
 	m.mx.Lock()
 	defer m.mx.Unlock()
 
@@ -53,3 +53,4 @@ func (m *HashMap) Exists(key string) bool {
 
 	return ok
 }
+
