@@ -7,8 +7,8 @@ import (
 )
 
 type AppConfig struct {
-	Port       string `yaml:"port"`
-	Host       int    `yaml:"host"`
+	Port       int `yaml:"port"`
+	Host       string    `yaml:"host"`
 	MaxClients int    `yaml:"max-clients"`
 	MaxTimeout int    `yaml:"max-timeout"`
 }
