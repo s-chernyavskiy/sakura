@@ -1,11 +1,11 @@
 TARGET = cmd/sakura/main.go
-OUT = sakura
+OUT = bin/sakura
 
 all: build test
 
 .PHONY: build
 build:
-	go build $(TARGET)
+	go build -o $(OUT) $(TARGET)
 
 .PHONY: run
 run:
