@@ -7,10 +7,10 @@ import (
 )
 
 type AppConfig struct {
-	Port       string `yaml:"host"`
-	Host       int    `yaml:"port"`
+	Port       string `yaml:"port"`
+	Host       int    `yaml:"host"`
 	MaxClients int    `yaml:"max-clients"`
-	MaxTimeout int `yaml:"max-timeout"`
+	MaxTimeout int    `yaml:"max-timeout"`
 }
 
 func NewConfig() *AppConfig {
