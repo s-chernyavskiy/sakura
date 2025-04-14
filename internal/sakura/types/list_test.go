@@ -265,3 +265,31 @@ func TestList_PopFront(t *testing.T) {
 		})
 	}
 }
+
+func TestList_Range(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		start  int
+		stop   int
+		want   []string
+		values []string
+	}{
+		{
+			name:   "generic range",
+			start:  2,
+			stop:   3,
+			want:   []string{"3", "4"},
+			values: []string{"1", "2", "3", "4", "5"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var l types.List
+			l.PushBack(tt.values...)
+
+			got := l.Range(tt.start, tt.stop)
+			testsuite.AssertStringSliceEqual(t, tt.want, got)
+		})
+	}
+}

@@ -30,7 +30,7 @@ func (n *Node) prevNode() *Node {
 type List struct {
 	root Node
 	len  int
-	m    sync.RWMutex
+	m    sync.Mutex
 }
 
 func (l *List) init() *List {
@@ -141,9 +141,6 @@ func buildValueList(front bool, val ...string) *List {
 }
 
 func (l *List) Length() int {
-	l.m.RLock()
-	defer l.m.RUnlock()
-
 	return l.len
 }
 
@@ -180,16 +177,10 @@ func (l *List) PushBack(val ...string) error {
 }
 
 func (l *List) Head() *Node {
-	l.m.RLock()
-	defer l.m.RUnlock()
-
 	return l.front()
 }
 
 func (l *List) Tail() *Node {
-	l.m.RLock()
-	defer l.m.RUnlock()
-
 	return l.back()
 }
 
@@ -211,4 +202,72 @@ func (l *List) PopFront() string {
 	}
 
 	return l.remove(l.Head())
+}
+
+func (l *List) convertPos(i int) int {
+	if i < 0 {
+		i = i + l.Length()
+	}
+
+	return i
+}
+
+func (l *List) at(index int) *Node {
+	if index < 0 || index > l.Length() {
+		return nil
+	}
+
+	if index == 0 {
+		return l.Head()
+	}
+
+	if index == l.Length()-1 {
+		return l.Tail()
+	}
+
+	for i, e := 1, l.Head().next; e != nil && i <= index; i, e = i+1, e.next {
+		if i == index {
+			return e
+		}
+	}
+
+	return nil
+}
+
+func toString(v any) string {
+	if s, ok := v.(string); ok {
+		return s
+	}
+
+	return ""
+}
+
+func (l *List) Range(start, stop int) []string {
+	l.m.Lock()
+	defer l.m.Unlock()
+
+	start = l.convertPos(start)
+	stop = l.convertPos(stop)
+
+	if start > l.Length()-1 {
+		return []string{}
+	}
+
+	if stop > l.Length()-1 {
+		stop = l.Length() - 1
+	}
+
+	distance := stop - start
+
+	if distance < 0 {
+		return []string{}
+	}
+
+	res := make([]string, distance+1)
+
+	for i, j, e := start, 0, l.at(start); e != nil && i <= stop; i, j, e = i+1, j+1, e.next {
+		res[j] = toString(e.Value)
+	}
+
+	return res
 }
