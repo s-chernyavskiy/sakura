@@ -282,6 +282,27 @@ func TestList_Range(t *testing.T) {
 			want:   []string{"3", "4"},
 			values: []string{"1", "2", "3", "4", "5"},
 		},
+		{
+			name:   "range all items",
+			start:  0,
+			stop:   -1,
+			want:   []string{"1", "2", "3", "4", "5"},
+			values: []string{"1", "2", "3", "4", "5"},
+		},
+		{
+			name:   "range from tail",
+			start:  -2,
+			stop:   -1,
+			want: []string{"4", "5"},
+			values:   []string{"1", "2", "3", "4", "5"},
+		},
+		{
+			name:   "range from head",
+			start:  0,
+			stop:   2,
+			want:   []string{"1", "2", "3"},
+			values: []string{"1", "2", "3", "4", "5"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
