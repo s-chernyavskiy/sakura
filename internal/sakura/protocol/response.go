@@ -1,19 +1,78 @@
 package protocol
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type IntegerReply struct {
-	value int
+	Value int
 }
 
-func (rep *IntegerReply) Reply() string {
-	return fmt.Sprintf(":%d\r\n", rep.value)
+func (r *IntegerReply) Reply() string {
+	return fmt.Sprintf(":%d\r\n", r.Value)
+}
+
+func NewIntegerReply(value int) *IntegerReply {
+	return &IntegerReply{Value: value}
 }
 
 type SimpleStringReply struct {
-	value string
+	Value string
 }
 
-func (rep *SimpleStringReply) Reply() string {
-	return fmt.Sprintf("+%s\r\n", rep.value)
+func (r *SimpleStringReply) Reply() string {
+	return fmt.Sprintf("+%s\r\n", r.Value)
 }
+
+func NewSimpleStringReply(value string) *SimpleStringReply {
+	return &SimpleStringReply{Value: value}
+}
+
+type BulkStringReply struct {
+	Value string
+	Nil   bool
+}
+
+func (r *BulkStringReply) Reply() string {
+	if r.Nil == true {
+		return fmt.Sprintf("$-1\r\n")
+	}
+
+	return fmt.Sprintf("$%d\r\n%s\r\n", len(r.Value), r.Value)
+}
+
+func NewBulkStringReply(isNil bool, value string) *BulkStringReply {
+	return &BulkStringReply{Nil: isNil, Value: value}
+}
+
+type ArrayReply struct {
+	Elems []Reply
+}
+
+func NewArrayReply(elems []Reply) *ArrayReply {
+	return &ArrayReply{Elems: elems}
+}
+
+func (r *ArrayReply) Reply() string {
+	length := len(r.Elems)
+	builder := strings.Builder{}
+
+	builder.WriteString(fmt.Sprintf("*%d\r\n", length))
+
+	for _, re := range r.Elems {
+		builder.WriteString(re.Reply() + "\r\n")
+	}
+
+	return builder.String()
+}
+
+type ErrorReply struct {
+	Prefix string
+	Err    string
+}
+
+func (r *ErrorReply) Error() string {
+	return fmt.Sprintf("-%s %s\r\n", r.Prefix, r.Err)
+}
+
