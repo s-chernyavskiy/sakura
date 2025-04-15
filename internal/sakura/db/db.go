@@ -11,7 +11,7 @@ type DB struct {
 }
 
 func NewDB() *DB {
-	return &DB{}
+	return &DB{file: make(map[string]*DataNode)}
 }
 
 type KeyNotFoundError struct {

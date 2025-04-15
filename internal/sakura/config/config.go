@@ -1,30 +1,11 @@
 package config
 
-import (
-	"os"
-
-	"gopkg.in/yaml.v3"
-)
-
 type AppConfig struct {
-	Port       int `yaml:"port"`
-	Host       string    `yaml:"host"`
+	Port       int    `yaml:"port"`
+	Host       string `yaml:"host"`
 	MaxClients int    `yaml:"max-clients"`
 	MaxTimeout int    `yaml:"max-timeout"`
-}
-
-func NewConfig() *AppConfig {
-	data, err := os.ReadFile("config/config.yaml")
-	if err != nil {
-		panic(err)
-	}
-
-	var config AppConfig
-
-	err = yaml.Unmarshal(data, &config)
-	if err != nil {
-		panic(err)
-	}
-
-	return &config
+	Verbose    bool   `yaml:"verbose"`
+	Logging    bool   `yaml:"logging"`
+	Logfile string `yaml:"logfile"`
 }

@@ -17,6 +17,18 @@ func NewIntegerReply(value int) *IntegerReply {
 	return &IntegerReply{Value: value}
 }
 
+type BooleanReply struct {
+	Value bool
+}
+
+func (r *BooleanReply) Reply() string {
+	return fmt.Sprintf(":%d\r\n", r.Value)
+}
+
+func NewBooleanReply(value bool) *BooleanReply {
+	return &BooleanReply{Value: value}
+}
+
 type SimpleStringReply struct {
 	Value string
 }
@@ -75,4 +87,3 @@ type ErrorReply struct {
 func (r *ErrorReply) Error() string {
 	return fmt.Sprintf("-%s %s\r\n", r.Prefix, r.Err)
 }
-

@@ -2,3 +2,6 @@ host: "127.0.0.1"
 port: 6543
 max-clients: 1000
 max-timeout: 120
+logging: true
+logfile: "../logs/kache.log"
+verbose: true
